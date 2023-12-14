@@ -1,0 +1,22 @@
+pipeline {
+    agent any
+ stages {
+      stage('checkout') {
+           steps {
+             script {
+                    git branch: 'main',
+                        credentialsId: 'github-ssh-key',
+                        url: 'git@github.com:d1ejest/site.git'
+                }
+          }
+        }
+  stage('Build Docker Image') {
+           steps {
+             
+                sh 'docker -H ubuntu@10.8.0.5:2376 build . -t myweb:${BUILD_ID}' 
+                sh 'docker -H ubuntu@10.8.0.5:2376 build . -t myweb:latest'
+          }
+        }
+
+    }
+}
