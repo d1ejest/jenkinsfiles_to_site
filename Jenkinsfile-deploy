@@ -1,0 +1,21 @@
+pipeline {
+    agent any
+stages {
+      stage('checkout') {
+           steps {
+             script {
+                    git branch: 'main',
+                        credentialsId: 'github-ssh-key',
+                        url: 'git@github.com:d1ejest/site.git'
+                }
+          }
+        }
+      stage('Deploy Web-site') {
+          steps{
+              sshagent(credentials: ['jenkins']) {
+                sh 'scp *.html ubuntu@10.8.0.4:/var/www/html'
+                }
+          }
+      }
+   }
+}
